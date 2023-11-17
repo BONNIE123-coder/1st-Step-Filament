@@ -23,28 +23,30 @@ class CityResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
-    protected static ?string $navigationLabel ='City';
+    protected static ?string $navigationLabel = 'City';
 
-    protected static ?string $modelLabel = ' City' ;
+    protected static ?string $modelLabel = 'City';
 
-    protected static ?string $navigationGroup = 'System Management' ;
+    protected static ?string $navigationGroup = 'System Management';
 
-    protected static ?int $navigationSort = 3 ;
+    protected static ?int $navigationSort = 3;
 
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-            Forms\Components\Select::make('state_id')
-                ->relationship(name:'state', titleAttribute:'name')
-                ->searchable()
-                ->preload()
-                ->native(false)
-                ->required(),
-            Forms\Components\TextInput::make('name')
-                ->required()
-                ->maxLength(255),
+                Forms\Components\Section::make('City Details')
+                    ->schema([
+                        Forms\Components\Select::make('state_id')
+                            ->relationship(name: 'state', titleAttribute: 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                    ])
             ]);
     }
 
@@ -53,18 +55,18 @@ class CityResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('state.name')
-                ->searchable()
-                ->sortable(),
-            Tables\Columns\TextColumn::make('name')
-                ->searchable(),
-            Tables\Columns\TextColumn::make('created_at')
-                ->dateTime()
-                ->sortable()
-                ->toggleable(isToggledHiddenByDefault: true),
-            Tables\Columns\TextColumn::make('updated_at')
-                ->dateTime()
-                ->sortable()
-                ->toggleable(isToggledHiddenByDefault: true),
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -77,6 +79,9 @@ class CityResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
             ]);
     }
 

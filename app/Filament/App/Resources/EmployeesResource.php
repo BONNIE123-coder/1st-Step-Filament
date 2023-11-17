@@ -17,12 +17,13 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Illuminate\Support\Collection;
 use Filament\Tables\Filters\Filter;
-use Filament\Forms\Components\Section;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
+
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\App\Resources\EmployeesResource\Pages;
 use App\Filament\App\Resources\EmployeesResource\RelationManagers;

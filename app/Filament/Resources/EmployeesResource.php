@@ -33,7 +33,7 @@ class EmployeesResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
-    protected static ?string $navigationGroup = 'Employee Management' ;
+    protected static ?string $navigationGroup = 'Employee Management';
 
     protected static ?string $recordTitleAttribute = 'first_name';
 
@@ -74,40 +74,39 @@ class EmployeesResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make('Relationships')
-                ->schema([
-                    Forms\Components\Select::make('country_id')
-                        ->relationship(name: 'country', titleAttribute: 'name')
-                        ->searchable()
-                        ->preload()
-                        ->live()
-                        ->afterStateUpdated(function (Set $set) {
-                            $set('state_id', null);
-                            $set('city_id', null);
-                        })
-                        ->required(),
-                    Forms\Components\Select::make('state_id')
-                        ->options(fn (Get $get): Collection => State::query()
-                            ->where('country_id', $get('country_id'))
-                            ->pluck('name', 'id'))
-                        ->searchable()
-                        ->preload()
-                        ->live()
-                        ->afterStateUpdated(fn (Set $set) => $set('city_id', null))
-                        ->required(),
-                    Forms\Components\Select::make('city_id')
-                        ->options(fn (Get $get): Collection => City::query()
-                            ->where('state_id', $get('state_id'))
-                            ->pluck('name', 'id'))
-                        ->searchable()
-                        ->live()
-                        ->preload()
-                        ->required(),
-                    Forms\Components\Select::make('department_id')
-                        ->relationship(name: 'department', titleAttribute: 'name')
-                        ->searchable()
-                        ->preload()
-                        ->required(),
-                ])->columns(2),
+                    ->schema([
+                        Forms\Components\Select::make('country_id')
+                            ->relationship(name: 'country', titleAttribute: 'name')
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('state_id', null);
+                                $set('city_id', null);
+                            })
+                            ->required(),
+                        Forms\Components\Select::make('state_id')
+                            ->options(fn (Get $get): Collection => State::query()
+                                ->where('country_id', $get('country_id'))
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(fn (Set $set) => $set('city_id', null))
+                            ->required(),
+                        Forms\Components\Select::make('city_id')
+                            ->options(fn (Get $get): Collection => City::query()
+                                ->where('state_id', $get('state_id'))
+                                ->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+                        Forms\Components\Select::make('department_id')
+                            ->relationship(name: 'department', titleAttribute: 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+                    ])->columns(2),
                 Forms\Components\Section::make('User Name')
                     ->description('Put the user name details in.')
                     ->schema([
@@ -120,9 +119,8 @@ class EmployeesResource extends Resource
                         Forms\Components\TextInput::make('middle_name')
                             ->required()
                             ->maxLength(255),
-
                     ])->columns(3),
-                    Forms\Components\Section::make('User adress')
+                Forms\Components\Section::make('User address')
                     ->schema([
                         Forms\Components\TextInput::make('address')
                             ->required()
@@ -130,11 +128,9 @@ class EmployeesResource extends Resource
                         Forms\Components\TextInput::make('zip_code')
                             ->required()
                             ->maxLength(255),
-
                     ])->columns(2),
-                    Forms\Components\Section::make('Dates')
+                Forms\Components\Section::make('Dates')
                     ->schema([
-
                         Forms\Components\DatePicker::make('date_of_birth')
                             ->native(false)
                             ->displayFormat('d/m/Y')
@@ -143,7 +139,8 @@ class EmployeesResource extends Resource
                             ->native(false)
                             ->displayFormat('d/m/Y')
                             ->required(),
-                ])->columns(2),
+                    ])->columns(2)
+
             ]);
     }
 
@@ -152,18 +149,11 @@ class EmployeesResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('country.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('state.name')
-                    ->numeric()
-                    ->hidden()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('city.name')
-                    ->numeric()
-                    ->hidden()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('first_name')
+                    ->sortable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('first_name')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('last_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('middle_name')
@@ -181,9 +171,6 @@ class EmployeesResource extends Resource
                 Tables\Columns\TextColumn::make('date_hired')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('department.name')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -200,7 +187,7 @@ class EmployeesResource extends Resource
                     ->preload()
                     ->label('Filter by Department')
                     ->indicator('Department'),
-                    Filter::make('created_at')
+                Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from'),
                         DatePicker::make('created_until'),
@@ -232,20 +219,22 @@ class EmployeesResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
-                ->successNotification(
-                    Notification::make()
-                        ->success()
-                        ->title('Employee deleted.')
-                        ->body('The Employee deleted successfully.')
-                )
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Employee deleted.')
+                            ->body('The Employee deleted successfully.')
+                    )
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
             ]);
     }
-
 
     public static function infolist(Infolist $infolist): Infolist
     {
@@ -294,7 +283,7 @@ class EmployeesResource extends Resource
         return [
             'index' => Pages\ListEmployees::route('/'),
             'create' => Pages\CreateEmployees::route('/create'),
-            //'view' => Pages\ViewEmployees::route('/{record}'),
+            //'view' => Pages\ViewEmployee::route('/{record}'),
             'edit' => Pages\EditEmployees::route('/{record}/edit'),
         ];
     }
